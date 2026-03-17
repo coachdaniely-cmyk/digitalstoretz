@@ -1,86 +1,64 @@
-// --- CONFIGURATION ---
-const WHATSAPP_NUMBER = "255700000000"; // WEKA NAMBA YAKO YA WHATSAPP HAPA
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Personal Shop | Navy Theme</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .bg-navy-dark { background-color: #001B3A; }
+        .bg-navy-light { background-color: #003366; }
+        .text-navy { color: #001B3A; }
+    </style>
+</head>
+<body class="bg-gray-100 font-sans">
 
-// Dummy Data (Hii inaweza kutoka kwenye API/Database baadaye)
-let products = [
-    {
-        id: 1,
-        name: "Professional Coaching Plan",
-        price: 25000,
-        desc: "Get 1-on-1 mentorship for your career growth.",
-        image: "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=400"
-    }
-];
-
-let cart = [];
-
-// Load Products
-function displayProducts() {
-    const list = document.getElementById('product-list');
-    if(!list) return;
-    
-    list.innerHTML = products.map(p => `
-        <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100 transform hover:scale-105 transition duration-300">
-            <img src="${p.image}" class="w-full h-48 object-cover">
-            <div class="p-5">
-                <h3 class="text-lg font-bold text-navy-dark">${p.name}</h3>
-                <p class="text-gray-500 text-sm h-12 overflow-hidden">${p.desc}</p>
-                <div class="mt-4 flex justify-between items-center">
-                    <span class="text-xl font-black text-navy-light">TSh ${p.price.toLocaleString()}</span>
-                    <button onclick="addToCart(${p.id})" class="bg-navy-dark text-white p-3 rounded-full hover:bg-blue-700 shadow-md">
-                        <i class="fas fa-plus"></i>
-                    </button>
-                </div>
+    <nav class="bg-navy-dark p-4 text-white sticky top-0 z-50 shadow-xl">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-2xl font-bold tracking-tighter">NAVY<span class="text-blue-400">STORE</span></h1>
+            <div class="relative cursor-pointer" onclick="toggleCart()">
+                <i class="fas fa-shopping-cart text-xl"></i>
+                <span id="cart-count" class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">0</span>
             </div>
         </div>
-    `).join('');
-}
+    </nav>
 
-function addToCart(id) {
-    const p = products.find(item => item.id === id);
-    cart.push(p);
-    updateCartUI();
-    toggleCart(); // Open modal instantly for quick checkout
-}
+    <header class="bg-navy-light py-12 text-center text-white">
+        <h2 class="text-3xl md:text-5xl font-bold mb-2">Welcome to My Store</h2>
+        <p class="text-blue-200">Quality Personal Products, Delivered via WhatsApp</p>
+    </header>
 
-function updateCartUI() {
-    document.getElementById('cart-count').innerText = cart.length;
-    const summary = document.getElementById('order-summary');
-    if(cart.length > 0) {
-        summary.innerHTML = `Order: ${cart[0].name} - TSh ${cart[0].price.toLocaleString()}`;
-    }
-}
+    <main class="container mx-auto p-6">
+        <div id="product-list" class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-8">
+            </div>
+    </main>
 
-function toggleCart() {
-    document.getElementById('checkout-modal').classList.toggle('hidden');
-}
+    <div id="checkout-modal" class="hidden fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center p-4 z-[100]">
+        <div class="bg-white rounded-xl max-w-md w-full p-6 shadow-2xl">
+            <h3 class="text-2xl font-bold text-navy-dark mb-4 text-center">Checkout Details</h3>
+            <div id="order-summary" class="mb-4 p-3 bg-blue-50 rounded italic text-sm text-gray-600"></div>
+            
+            <div class="space-y-4">
+                <input type="text" id="cust-name" placeholder="Jina Kamili" class="w-full border-2 border-gray-200 p-3 rounded-lg focus:border-navy-light outline-none">
+                <input type="tel" id="cust-phone" placeholder="Namba ya Simu (M-Pesa/Tigo)" class="w-full border-2 border-gray-200 p-3 rounded-lg focus:border-navy-light outline-none">
+                
+                <div class="bg-gray-50 p-3 rounded-lg border border-dashed border-navy-light">
+                    <p class="text-xs text-gray-500 uppercase font-bold mb-1">Payment Method</p>
+                    <label class="flex items-center space-x-2">
+                        <input type="radio" checked>
+                        <span>Mobile Money / WhatsApp Confirmation</span>
+                    </label>
+                </div>
 
-function completeOrder() {
-    const name = document.getElementById('cust-name').value;
-    const phone = document.getElementById('cust-phone').value;
+                <button onclick="completeOrder()" class="w-full bg-navy-dark text-white py-4 rounded-lg font-bold hover:bg-black transition flex items-center justify-center">
+                    <i class="fab fa-whatsapp mr-2 text-xl"></i> COMPLETE ON WHATSAPP
+                </button>
+                <button onclick="toggleCart()" class="w-full text-gray-400 text-sm">Cancel & Back</button>
+            </div>
+        </div>
+    </div>
 
-    if(!name || !phone) {
-        alert("Tafadhali jaza jina na namba ya simu");
-        return;
-    }
-
-    const item = cart[0]; // Mfumo huu ni wa bidhaa moja kwa haraka (minimal steps)
-    
-    // Ujumbe wa WhatsApp
-    const message = `*NEW ORDER - NAVY STORE*%0A` +
-                    `--------------------------%0A` +
-                    `*Customer:* ${name}%0A` +
-                    `*Phone:* ${phone}%0A` +
-                    `*Product:* ${item.name}%0A` +
-                    `*Total:* TSh ${item.price.toLocaleString()}%0A` +
-                    `--------------------------%0A` +
-                    `Tafadhali thibitisha malipo yangu.`;
-
-    const waLink = `https://wa.me/${WHATSAPP_NUMBER}?text=${message}`;
-    
-    // Redirect mteja kwenda WhatsApp
-    window.location.href = waLink;
-}
-
-// Start
-displayProducts();
+    <script src="app.js"></script>
+</body>
+</html>
