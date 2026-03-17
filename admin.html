@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Dashboard | NavyStore</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-900 text-white min-h-screen">
+    <div class="flex">
+        <aside class="w-64 bg-slate-800 p-6 min-h-screen border-r border-slate-700">
+            <h2 class="text-xl font-bold mb-8">Admin Panel</h2>
+            <nav class="space-y-4">
+                <a href="#" class="block bg-blue-600 p-2 rounded">Dashboard</a>
+                <a href="#" class="block text-gray-400 hover:text-white">Products</a>
+                <a href="#" class="block text-gray-400 hover:text-white">Orders</a>
+            </nav>
+        </aside>
+
+        <main class="flex-1 p-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+                <div class="bg-slate-800 p-6 rounded-xl border border-blue-500/30">
+                    <p class="text-gray-400">Total Sales</p>
+                    <h3 class="text-3xl font-bold">TSh 0</h3>
+                </div>
+                <div class="bg-slate-800 p-6 rounded-xl border border-blue-500/30">
+                    <p class="text-gray-400">Orders</p>
+                    <h3 class="text-3xl font-bold">0</h3>
+                </div>
+                <div class="bg-slate-800 p-6 rounded-xl border border-blue-500/30">
+                    <p class="text-gray-400">Products</p>
+                    <h3 id="product-count" class="text-3xl font-bold">1</h3>
+                </div>
+            </div>
+
+            <div class="bg-slate-800 p-8 rounded-xl max-w-2xl">
+                <h4 class="text-xl font-bold mb-6">Upload New Product</h4>
+                <div class="space-y-4">
+                    <input type="text" id="p-name" placeholder="Product Name" class="w-full bg-slate-700 p-3 rounded outline-none border border-slate-600 focus:border-blue-500">
+                    <input type="number" id="p-price" placeholder="Price (TSh)" class="w-full bg-slate-700 p-3 rounded outline-none border border-slate-600">
+                    <textarea id="p-desc" placeholder="Description" class="w-full bg-slate-700 p-3 rounded outline-none border border-slate-600"></textarea>
+                    <input type="text" id="p-img" placeholder="Image URL (Placeholder provided if empty)" class="w-full bg-slate-700 p-3 rounded outline-none border border-slate-600">
+                    <button onclick="saveProduct()" class="bg-blue-600 px-6 py-3 rounded font-bold hover:bg-blue-500 transition">Publish Product</button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        function saveProduct() {
+            // Hapa utaongeza logic ya kusave kwenye Database (e.g. Supabase au Firebase)
+            alert('Product logic connected! Ready for database sync.');
+        }
+    </script>
+</body>
+</html>
