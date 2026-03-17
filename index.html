@@ -1,0 +1,86 @@
+// --- CONFIGURATION ---
+const WHATSAPP_NUMBER = "255700000000"; // WEKA NAMBA YAKO YA WHATSAPP HAPA
+
+// Dummy Data (Hii inaweza kutoka kwenye API/Database baadaye)
+let products = [
+    {
+        id: 1,
+        name: "Professional Coaching Plan",
+        price: 25000,
+        desc: "Get 1-on-1 mentorship for your career growth.",
+        image: "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=400"
+    }
+];
+
+let cart = [];
+
+// Load Products
+function displayProducts() {
+    const list = document.getElementById('product-list');
+    if(!list) return;
+    
+    list.innerHTML = products.map(p => `
+        <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100 transform hover:scale-105 transition duration-300">
+            <img src="${p.image}" class="w-full h-48 object-cover">
+            <div class="p-5">
+                <h3 class="text-lg font-bold text-navy-dark">${p.name}</h3>
+                <p class="text-gray-500 text-sm h-12 overflow-hidden">${p.desc}</p>
+                <div class="mt-4 flex justify-between items-center">
+                    <span class="text-xl font-black text-navy-light">TSh ${p.price.toLocaleString()}</span>
+                    <button onclick="addToCart(${p.id})" class="bg-navy-dark text-white p-3 rounded-full hover:bg-blue-700 shadow-md">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    `).join('');
+}
+
+function addToCart(id) {
+    const p = products.find(item => item.id === id);
+    cart.push(p);
+    updateCartUI();
+    toggleCart(); // Open modal instantly for quick checkout
+}
+
+function updateCartUI() {
+    document.getElementById('cart-count').innerText = cart.length;
+    const summary = document.getElementById('order-summary');
+    if(cart.length > 0) {
+        summary.innerHTML = `Order: ${cart[0].name} - TSh ${cart[0].price.toLocaleString()}`;
+    }
+}
+
+function toggleCart() {
+    document.getElementById('checkout-modal').classList.toggle('hidden');
+}
+
+function completeOrder() {
+    const name = document.getElementById('cust-name').value;
+    const phone = document.getElementById('cust-phone').value;
+
+    if(!name || !phone) {
+        alert("Tafadhali jaza jina na namba ya simu");
+        return;
+    }
+
+    const item = cart[0]; // Mfumo huu ni wa bidhaa moja kwa haraka (minimal steps)
+    
+    // Ujumbe wa WhatsApp
+    const message = `*NEW ORDER - NAVY STORE*%0A` +
+                    `--------------------------%0A` +
+                    `*Customer:* ${name}%0A` +
+                    `*Phone:* ${phone}%0A` +
+                    `*Product:* ${item.name}%0A` +
+                    `*Total:* TSh ${item.price.toLocaleString()}%0A` +
+                    `--------------------------%0A` +
+                    `Tafadhali thibitisha malipo yangu.`;
+
+    const waLink = `https://wa.me/${WHATSAPP_NUMBER}?text=${message}`;
+    
+    // Redirect mteja kwenda WhatsApp
+    window.location.href = waLink;
+}
+
+// Start
+displayProducts();
